@@ -27,8 +27,25 @@ app.post("/query", (req, res) => {
   const { sql } = req.body;
   db.all(sql, (err, rows) => {
     if (err) return res.status(400).json({ error: err.message });
-    res.json({ rows });
+
+    // 🧠 Convert BigInt -> Number or String
+    const safeRows = rows.map((row) => {
+      const converted = {};
+      for (const [key, value] of Object.entries(row)) {
+        if (typeof value === "bigint") {
+          // use Number if safe, else String to preserve value
+          converted[key] =
+            value < Number.MAX_SAFE_INTEGER ? Number(value) : value.toString();
+        } else {
+          converted[key] = value;
+        }
+      }
+      return converted;
+    });
+
+    res.json({ rows: safeRows });
   });
 });
+
 
 app.listen(4000, () => console.log("✅ Data engine on port 4000"));
