@@ -25,7 +25,8 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
 app.post("/query", (req, res) => {
   const { sql } = req.body;
-  db.all(sql, (err, rows) => {
+  const safeSQL = sql.replace(/\[([^\]]+)\]/g, (_, col) => `"${col}"`);
+  safeSQL.all(sql, (err, rows) => {
     if (err) return res.status(400).json({ error: err.message });
 
     // 🧠 Convert BigInt -> Number or String
