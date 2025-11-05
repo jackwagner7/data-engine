@@ -6,9 +6,10 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.19.0",
-    "duckdb": "^1.1.1",
+    "apache-arrow": "^21.1.0",
     "cors": "^2.8.5",
+    "duckdb": "^1.4.1",
+    "express": "^4.19.0",
     "multer": "^1.4.5-lts.1"
   }
 }
